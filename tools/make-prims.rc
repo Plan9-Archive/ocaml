@@ -1,0 +1,16 @@
+#!/bin/rc
+sed -n -e 's/CAMLprim value ([a-z0-9_][a-z0-9_]*).*/\1/p' $* |
+sort | uniq > primitives
+
+echo '#define CAML_INTERNALS'
+echo '#include "caml/mlvalues.h"'
+echo '#include "caml/prims.h"'
+sed 's/.*/extern value &();/' primitives
+echo 'c_primitive caml_builtin_cprim[] = {'
+sed 's/.*/	&,/' primitives
+echo '	 0 };'
+echo 'char * caml_names_of_builtin_cprim[] = {';
+sed 's/.*/	"&",/' primitives
+echo '	 0 };'
+
+rm primitives
