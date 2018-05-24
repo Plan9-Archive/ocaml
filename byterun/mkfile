@@ -52,11 +52,13 @@ OFILES=\
 	main.$O
 HFILES=caml/version.h caml/jumptbl.h
 CLEANFILES=caml/version.h caml/jumptbl.h prims.c
+BIN=$home/bin/$objtype
 
 </sys/src/cmd/mkone
 
 CC=pcc
 CFLAGS=\
+	-I$objtype\
 	-D_BSD_EXTENSION\
 	-D_C99_SNPRINTF_EXTENSION\
 	-D_POSIX_SOURCE\
