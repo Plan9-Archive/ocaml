@@ -85,3 +85,5 @@
    software emulation of division and modulus. */
 
 #define FLAT_FLOAT_ARRAY
+
+#define PROFINFO_WIDTH 0
