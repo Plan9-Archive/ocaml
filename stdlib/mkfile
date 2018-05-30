@@ -54,10 +54,15 @@ OFILES=\
 	camlinternalBigarray.cmo
 IFILES=${OFILES:%.cmo=%.cmi}
 
+all: $TARG std_exit.cmo
+
 $TARG: camlinternalFormatBasics.cmo pervasives.cmo $OFILES
 	$OCAMLC -a -o $TARG $prereq
 
-$IFILES: pervasives.cmi
+install: all
+	cp stdlib.cma std_exit.cmo camlheader camlheader_ur ../boot
+
+$IFILES std_exit.cmo: pervasives.cmi
 
 sys.ml: sys.mlp ../VERSION
 	sed 's|%%VERSION%%|'^`{sed -e 1q ../VERSION | tr -d '\r'}^'|' sys.mlp > sys.ml
@@ -72,6 +77,6 @@ camlinternalBigarray.cmi camlinternalBigarray.cmo: camlinternalBigarray.ml
 	$OCAMLC $OCAMLFLAGS `{../tools/Compflags.rc $stem.cmo} $stem.ml
 
 clean:V:
-	rm -f *.cmi *.cmo sys.ml
+	rm -f *.cm[io] sys.ml
 
 <.depend
