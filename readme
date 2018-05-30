@@ -1,0 +1,15 @@
+Ocaml build from the people's front of cat-v.org
+
+This is still a work in progress. Current status is that the ocaml runtime
+vm is built, ocamlyacc is built, and the ocaml std library is built.
+
+To build with this, get a recent ocaml from here https://github.com/ocaml/ocaml/releases
+and untar it somewhere. Then dircp this repo into that untarred directory.
+
+Then you can go into the byterun, yacc, and stdlib directories and use mk
+to build and install ocaml components.
+
+I will try to keep this readme updated as I make progress. All that is left
+is the compiler itself. If you have already built ocaml byte code programs on
+another OS, then you should already be able to run them on plan 9 with the
+ocamlrun runtime.
