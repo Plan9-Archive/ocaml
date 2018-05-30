@@ -1,8 +1,7 @@
 OCAMLC=ocamlrun ../boot/ocamlc
 OCAMLFLAGS=-use-prims ../byterun/primitives -strict-sequence -absname -w +a-4-9-41-42-44-45-48 -g -warn-error A -bin-annot -nostdlib -safe-string -strict-formats -c
 TARG=stdlib.cma
-OBJS=\
-	camlinternalFormatBasics.cmo\
+OFILES=\
 	list.cmo\
 	char.cmo\
 	uchar.cmo\
@@ -53,18 +52,26 @@ OBJS=\
 	stdLabels.cmo\
 	spacetime.cmo\
 	camlinternalBigarray.cmo
+IFILES=${OFILES:%.cmo=%.cmi}
 
-$OBJS: pervasives.cmo
+$TARG: camlinternalFormatBasics.cmo pervasives.cmo $OFILES
+	$OCAMLC -a -o $TARG $prereq
 
-$TARG: $OBJS
+$IFILES: pervasives.cmi
+
+sys.ml: sys.mlp ../VERSION
+	sed 's|%%VERSION%%|'^`{sed -e 1q ../VERSION | tr -d '\r'}^'|' sys.mlp > sys.ml
+
+camlinternalBigarray.cmi camlinternalBigarray.cmo: camlinternalBigarray.ml
+	$OCAMLC $OCAMLFLAGS `{../tools/Compflags.rc camlinternalBigarray.cmi} camlinternalBigarray.ml
 
 %.cmi: %.mli
 	$OCAMLC $OCAMLFLAGS `{../tools/Compflags.rc $stem.cmi} $stem.mli
 
 %.cmo: %.ml
-	$OCAMLC $OCAMLFLAGS `{../tools/Compflags.rc $stem.cmi} $stem.mli
+	$OCAMLC $OCAMLFLAGS `{../tools/Compflags.rc $stem.cmo} $stem.ml
 
 clean:V:
-	rm -f *.cmi *.cmo
+	rm -f *.cmi *.cmo sys.ml
 
 <.depend
